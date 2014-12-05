@@ -85,7 +85,7 @@ public class TestLinkServiceTest
     {
         TestLinkService service = new TestLinkService(testLinkURL, devKey);
         TestPlan testPlan = service.getTestPlan(testplan, project);
-        List<String> testcases = service.getTestcases(testPlan.getId());
+        List<String> testcases = service.getTestCases(testPlan.getId());
         Assert.assertNotNull(testcases);
     }
 }

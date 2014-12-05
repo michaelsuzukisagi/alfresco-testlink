@@ -17,12 +17,12 @@ package org.alfresco.testlink;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 
 import br.eti.kinoshita.testlinkjavaapi.TestLinkAPI;
-import br.eti.kinoshita.testlinkjavaapi.constants.ExecutionStatus;
 import br.eti.kinoshita.testlinkjavaapi.constants.ExecutionType;
 import br.eti.kinoshita.testlinkjavaapi.constants.TestCaseDetails;
 import br.eti.kinoshita.testlinkjavaapi.model.TestCase;
@@ -111,19 +111,23 @@ public class TestLinkService
      * Get all the test case externalIds in the test plan to run in automation. 
      * The externalIds are the test case identifier used by alfresco.
      * @param testPlanID test plan identifier
-     * @return List of test case names in testplan. 
+     * @return List of test case names from test plan. 
      */
-    public List<String> getTestcases(final int testPlanID) 
+    public List<String> getTestCases(final int testPlanID) 
     { 
         TestCase[] testcases = 
                 testlinkAPIClient.getTestCasesForTestPlan(testPlanID, null, null, null, null, null, null, null, ExecutionType.AUTOMATED, true, TestCaseDetails.FULL);
-        List<String> testcaseNames = new ArrayList<String>(); 
-        for (TestCase testCase : testcases) 
-        { 
-            TestCase finalTestcase = testlinkAPIClient.getTestCase( testCase.getId(), null, null);
-            testcaseNames.add(finalTestcase.getFullExternalId()); 
+        if(testcases != null && testcases.length > 0)
+        {
+            List<String> testcaseNames = new ArrayList<String>(); 
+            for (TestCase testCase : testcases) 
+            { 
+                TestCase finalTestcase = testlinkAPIClient.getTestCase( testCase.getId(), null, null);
+                testcaseNames.add(finalTestcase.getFullExternalId()); 
+            }
+            return testcaseNames; 
         }
-        return testcaseNames; 
+        return Collections.<String>emptyList();
     } 
     
 }
