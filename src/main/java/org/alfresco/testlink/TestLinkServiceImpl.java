@@ -39,7 +39,7 @@ import br.eti.kinoshita.testlinkjavaapi.util.TestLinkAPIException;
  * @author Michael Suzuki
  *
  */
-public class TestLinkService
+public class TestLinkServiceImpl implements TestService
 {
  
     private final TestLinkAPI testlinkAPIClient;
@@ -50,7 +50,7 @@ public class TestLinkService
      * @throws TestLinkAPIException if error
      * @throws MalformedURLException if incorrect url
      */
-    public TestLinkService(final String testLinkURL, final String devKey) throws TestLinkAPIException, MalformedURLException
+    public TestLinkServiceImpl(final String testLinkURL, final String devKey) throws TestLinkAPIException, MalformedURLException
     {
         if(StringUtils.isEmpty(testLinkURL))
         {
@@ -62,10 +62,8 @@ public class TestLinkService
         }
         testlinkAPIClient = new TestLinkAPI(new URL(testLinkURL), devKey);
     }
-    /**
-     * Gets the test project details.
-     * @param name project name
-     * @return {@link TestProject} project details
+    /* (non-Javadoc)
+     * @see org.alfresco.testlink.TestService#getTestProject(java.lang.String)
      */
     public TestProject getTestProject(final String name)
     {
@@ -75,11 +73,8 @@ public class TestLinkService
         }
         return testlinkAPIClient.getTestProjectByName(name);
     }
-    /**
-     * Get test case details from a test case name.
-     * @param testcase String test case name
-     * @param id String test case name
-     * @return
+    /* (non-Javadoc)
+     * @see org.alfresco.testlink.TestService#getTestCase(java.lang.String)
      */
     public TestCase getTestCase(final String id)
     {
@@ -89,12 +84,8 @@ public class TestLinkService
         }
         return testlinkAPIClient.getTestCaseByExternalId(id, 1);
     }
-    /**
-     * Get test plan details from a test case name.
-     * @param testcase String test case name
-     * @param testplanId String test plan identifier
-     * @param testplanId String test plan identifier
-     * @return {@link TestPlan} test plan details
+    /* (non-Javadoc)
+     * @see org.alfresco.testlink.TestService#getTestPlan(java.lang.String, java.lang.String)
      */
     public TestPlan getTestPlan(final String testplanId,final String projectId)
     {
@@ -108,17 +99,14 @@ public class TestLinkService
         }
         return testlinkAPIClient.getTestPlanByName(testplanId, projectId);
     }
-    /**
-     * Get all the test cases in test plan, to run in automation. 
-
-     * @param testPlanID test plan identifier
-     * @return List of test case names from test plan. 
+    /* (non-Javadoc)
+     * @see org.alfresco.testlink.TestService#getTestCases(int)
      */
-    public List<TestCase> getTestCases(final int testPlanID) 
+    public List<String> getTestCases(final int testPlanID) 
     { 
         TestCase[] testcases = testlinkAPIClient.getTestCasesForTestPlan(testPlanID, null, null, null, null,
                 null, null, null, ExecutionType.AUTOMATED, true, TestCaseDetails.FULL);
-        return Arrays.asList(testcases);
+        return parseTestCaseId(Arrays.asList(testcases));
     } 
     /**
      * Extracts the test case identifier from the test case object.

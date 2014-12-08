@@ -43,82 +43,82 @@ public class TestLinkServiceTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void connectNullUrl() throws TestLinkAPIException, MalformedURLException
     {
-        new TestLinkService(null, devKey);
+        new TestLinkServiceImpl(null, devKey);
     }
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void connectNullKey() throws TestLinkAPIException, MalformedURLException
     {
-        new TestLinkService(testLinkURL, null);
+        new TestLinkServiceImpl(testLinkURL, null);
     }
     @Test
     public void connect() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestService service = new TestLinkServiceImpl(testLinkURL, devKey);
         Assert.assertNotNull(service);
     }
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void getTestProjectNull() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestService service = new TestLinkServiceImpl(testLinkURL, devKey);
         service.getTestProject(null);
     }
     @Test
     public void getTestProject() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestService service = new TestLinkServiceImpl(testLinkURL, devKey);
         TestProject testProject = service.getTestProject(project);
         Assert.assertNotNull(testProject);
     }
     @Test
     public void getTestCase() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestService service = new TestLinkServiceImpl(testLinkURL, devKey);
         TestCase testCase = service.getTestCase(testcase);
         Assert.assertNotNull(testCase);
     }
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void getTestCaseNull() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestService service = new TestLinkServiceImpl(testLinkURL, devKey);
         service.getTestCase(null);
     }
     @Test
     public void getTestPlan() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestService service = new TestLinkServiceImpl(testLinkURL, devKey);
         TestPlan testPlan = service.getTestPlan(testplan, project);
         Assert.assertNotNull(testPlan);
     }
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void getTestPlanNull() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestService service = new TestLinkServiceImpl(testLinkURL, devKey);
         service.getTestPlan(null, project);
     }
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void getTestPlanNullProject() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestService service = new TestLinkServiceImpl(testLinkURL, devKey);
         service.getTestPlan(testplan, null);
     }
     @Test(expectedExceptions = TestLinkAPIException.class)
     public void getInvalidTestCases() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestService service = new TestLinkServiceImpl(testLinkURL, devKey);
         Assert.assertNull(service.getTestCases(-1));
     }
     @Test
     public void getTestCases() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestLinkServiceImpl service = new TestLinkServiceImpl(testLinkURL, devKey);
         TestPlan testPlan = service.getTestPlan(testplan, project);
-        List<TestCase> testcases = service.getTestCases(testPlan.getId());
+        List<String> testcases = service.getTestCases(testPlan.getId());
         Assert.assertNotNull(testcases);
     }
     @Test
     public void parseEmptyTestCases() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestLinkServiceImpl service = new TestLinkServiceImpl(testLinkURL, devKey);
         List<String> list = service.parseTestCaseId(null);
         Assert.assertEquals(list, Collections.<String>emptyList());
         List<String> list2 = service.parseTestCaseId(Collections.<TestCase>emptyList());
@@ -127,7 +127,7 @@ public class TestLinkServiceTest
     @Test
     public void parseTestCases() throws TestLinkAPIException, MalformedURLException
     {
-        TestLinkService service = new TestLinkService(testLinkURL, devKey);
+        TestLinkServiceImpl service = new TestLinkServiceImpl(testLinkURL, devKey);
         TestCase testcase = new TestCase();
         testcase.setFullExternalId("ANO-1");
         List<TestCase> testcases = new ArrayList<TestCase>();
