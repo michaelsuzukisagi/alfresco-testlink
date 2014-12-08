@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2012 Alfresco Software Limited.
+ * Copyright (C) 2005-2014 Alfresco Software Limited.
  * This file is part of Alfresco
  * Alfresco is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,6 +17,7 @@ package org.alfresco.testlink;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -108,26 +109,37 @@ public class TestLinkService
         return testlinkAPIClient.getTestPlanByName(testplanId, projectId);
     }
     /**
-     * Get all the test case externalIds in the test plan to run in automation. 
-     * The externalIds are the test case identifier used by alfresco.
+     * Get all the test cases in test plan, to run in automation. 
+
      * @param testPlanID test plan identifier
      * @return List of test case names from test plan. 
      */
-    public List<String> getTestCases(final int testPlanID) 
+    public List<TestCase> getTestCases(final int testPlanID) 
     { 
-        TestCase[] testcases = 
-                testlinkAPIClient.getTestCasesForTestPlan(testPlanID, null, null, null, null, null, null, null, ExecutionType.AUTOMATED, true, TestCaseDetails.FULL);
-        if(testcases != null && testcases.length > 0)
+        TestCase[] testcases = testlinkAPIClient.getTestCasesForTestPlan(testPlanID, null, null, null, null,
+                null, null, null, ExecutionType.AUTOMATED, true, TestCaseDetails.FULL);
+        return Arrays.asList(testcases);
+    } 
+    /**
+     * Extracts the test case identifier from the test case object.
+     * The externalIds param is used by Alfresco to identify the test case 
+     * and not the id, hence we are using externalIds.
+     *  
+     * @param testcases String id
+     * @return List<String> test case identifiers
+     */
+    public List<String> parseTestCaseId(List<TestCase> testcases)
+    {
+        if(testcases != null && !testcases.isEmpty())
         {
             List<String> testcaseNames = new ArrayList<String>(); 
             for (TestCase testCase : testcases) 
             { 
-                TestCase finalTestcase = testlinkAPIClient.getTestCase( testCase.getId(), null, null);
-                testcaseNames.add(finalTestcase.getFullExternalId()); 
+                testcaseNames.add(testCase.getFullExternalId()); 
             }
             return testcaseNames; 
         }
         return Collections.<String>emptyList();
-    } 
+    }
     
 }
